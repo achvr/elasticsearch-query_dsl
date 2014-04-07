@@ -1,7 +1,7 @@
 module Elasticsearch
   module QueryDsl
     class AndFilter < Filter
-      attribute_methods :cache
+      attribute_method :cache
       alias :_cache :cache
       filter_container_method :filters
       delegate *QueryDsl.component_method_names(:filters), :to => :filters

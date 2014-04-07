@@ -286,6 +286,36 @@ module Elasticsearch
           :class_name => 'ScriptField',
           :aliases => []
         }
+      },
+      :score_functions => {
+        'boost_factor' => {
+          :class_name => 'BoostFactorScoreFunction',
+          :aliases => []
+        },
+        'exp' => {
+          :class_name => 'ExpDecayScoreFunction',
+          :aliases => [:exp_decay]
+        },
+        'field_value_factor' => {
+          :class_name => 'FieldValueFactorScoreFunction',
+          :aliases => []
+        },
+        'gauss' => {
+          :class_name => 'GaussDecayScoreFunction',
+          :aliases => [:gauss_decay]
+        },
+        'linear' => {
+          :class_name => 'LinearDecayScoreFunction',
+          :aliases => [:linear_decay]
+        },
+        'random_score' => {
+          :class_name => 'RandomScoreFunction',
+          :aliases => [:random]
+        },
+        'script_score' => {
+          :class_name => 'ScriptScoreFunction',
+          :aliases => []
+        }
       }
     }
 
@@ -317,7 +347,10 @@ require 'elasticsearch/query_dsl/search_def.rb'
 require 'elasticsearch/query_dsl/query.rb'
 require 'elasticsearch/query_dsl/filter.rb'
 require 'elasticsearch/query_dsl/sort.rb'
+require 'elasticsearch/query_dsl/score_function.rb'
+require 'elasticsearch/query_dsl/script_param_values.rb'
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'filters', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'queries', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'sorts', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'script_fields', '*.rb')].each {|file| require file }
+Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'score_functions', '*.rb')].each {|file| require file }

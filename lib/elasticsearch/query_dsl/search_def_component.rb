@@ -102,6 +102,11 @@ module Elasticsearch
         end
         alias :script_field_container_methods :script_field_container_method
 
+        def score_function_container_method(*method_names)
+          container_method(ScoreFunctionContainer, *method_names)
+        end
+        alias :score_function_container_methods :score_function_container_method
+
         def attribute_method(*method_names)
           method_names.flatten.each do |method_name|
             define_method method_name do |*args, &block|
@@ -147,11 +152,30 @@ module Elasticsearch
         elsif components.length == 1
           components.first.to_hash(params)
         else
-          # components.collect{|component| component.to_hash(params)}
           components.inject{|comp, other_comp| comp.to_hash(params).update(other_comp.to_hash(params))}
         end
       end
     end
 
+    class ScoreFunctionContainer < SearchDefComponent
+      include SearchDefComponents
+      component_methods :score_functions
+
+      def to_hash(params={})
+        if empty?
+          nil
+        elsif components.length == 1
+          components.first.to_hash(params)
+        else
+          components.collect do |component|
+            if !component.filter.nil? && !component.filter.empty?
+              {:filter => component.filter.to_hash(params)}.update(component.to_hash(params))
+            else
+              component.to_hash(params)
+            end
+          end
+        end
+      end
+    end
   end
 end

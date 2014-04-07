@@ -3,12 +3,6 @@ module Elasticsearch
     class ScriptField < SearchDefComponent
       attribute_methods :field, :script
 
-      class ScriptParamValues < Hash
-        def method_missing(method_symbol, *args)
-          self[method_symbol] = args.first
-        end
-      end
-
       def params(*args, &block)
         @params ||= ScriptParamValues.new
         @params.instance_exec(&block)

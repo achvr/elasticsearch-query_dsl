@@ -1,7 +1,7 @@
 module Elasticsearch
   module QueryDsl
-    class ScriptSort < Sort
-      attribute_methods :script, :type, :order
+    class ScriptScoreFunction < ScoreFunction
+      attribute_methods :lang, :script
 
       def params(*args, &block)
         @params ||= ScriptParamValues.new
@@ -10,12 +10,10 @@ module Elasticsearch
       end
 
       def to_hash(params={})
-        h = {}
-        h[:script] = @script unless @script.nil?
-        h[:type]   = @type unless @type.nil?
-        h[:order]  = @order unless @order.nil?
+        h = {:script => @script}
+        h[:lang] = @lang unless @lang.nil?
         h[:params] = @params unless @params.nil?
-        {:_script => h}
+        {:script_score => h}
       end
     end
   end
