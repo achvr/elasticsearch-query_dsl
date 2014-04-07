@@ -1,14 +1,14 @@
 module Elasticsearch
   module QueryDsl
     class TermsFilter < Filter
-      def field(val=nil)
-        @field = val unless val.nil?
-        @field
-      end
+      attribute_methods :field, :values, :execution, :cache
+      alias :_cache :cache
 
-      def values(val=nil)
-        @values = val unless val.nil?
-        @values
+      def to_hash(params={})
+        h = {@field => Array(values)}
+        h[:execution] = @execution unless @execution.nil?
+        h[:_cache] = @cache unless @cache.nil?
+        {:terms => h}
       end
     end
   end

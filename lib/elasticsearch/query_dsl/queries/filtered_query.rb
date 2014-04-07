@@ -7,8 +7,8 @@ module Elasticsearch
       def to_hash(params={})
         {
           :filtered => {
-            :query => @query.to_hash(params),
-            :filter => @filter.to_hash(params)
+            :query => (@query.nil? || @query.empty?) ? MatchAllQuery.new.to_hash : @query.to_hash(params),
+            :filter => (@filter.nil? || @filter.empty?) ? MatchAllFilter.new.to_hash : @filter.to_hash(params),
           }
         }
       end

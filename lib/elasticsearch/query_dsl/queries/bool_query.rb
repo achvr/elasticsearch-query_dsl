@@ -2,12 +2,7 @@ module Elasticsearch
   module QueryDsl
     class BoolQuery < Query
       query_container_method :must, :must_not, :should
-
-      def minimum_should_match
-      end
-
-      def boost
-      end
+      attribute_methods :minimum_should_match, :boost
 
       def to_hash(params={})
         h = {}

@@ -2,9 +2,7 @@ module Elasticsearch
   module QueryDsl
     class BoostingQuery < Query
       query_container_methods :positive, :negative
-
-      def negative_boost(val=nil)
-      end
+      attribute_method :negative_boost
     end
   end
 end

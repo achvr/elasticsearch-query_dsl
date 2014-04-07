@@ -3,9 +3,7 @@ module Elasticsearch
     class ConstantScoreQuery < Query
       query_container_method :query
       filter_container_method :filter
-
-      def boost(val=nil)
-      end
+      attribute_method :boost
     end
   end
 end

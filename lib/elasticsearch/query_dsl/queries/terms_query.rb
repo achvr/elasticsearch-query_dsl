@@ -22,8 +22,8 @@ module Elasticsearch
 
       def to_hash(params={})
         h = {@field => Array(values)}
-        h['minimum_should_match'] = @minimum_should_match unless @minimum_should_match.nil?
-        {'terms' => h}
+        h[:minimum_should_match] = @minimum_should_match unless @minimum_should_match.nil?
+        {:terms => h}
       end
     end
   end

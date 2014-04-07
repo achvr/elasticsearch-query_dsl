@@ -13,7 +13,6 @@ module Elasticsearch
       attr_reader :search_def
 
       def initialize(attributes={})
-        puts "===> SearchDefComponent attributes: #{attributes.inspect}"
         @id = attributes.delete(:id)
         @search_def = attributes.delete(:search_def)
         attributes.each do |attr_name, attr_value|
@@ -25,7 +24,6 @@ module Elasticsearch
       end
 
       def set_search_def(search_def)
-        puts "IN set_search_def: #{search_def}"
         @search_def = search_def
         if !@id.nil? && !@search_def.nil?
           @search_def.register_component(@id, self)
@@ -34,6 +32,17 @@ module Elasticsearch
 
       def update(&block)
         instance_exec(&block)
+      end
+
+      def as(component_id, &block)
+        @id = component_id
+        if !@id.nil? && !@search_def.nil?
+          @search_def.register_component(@id, self)
+        end
+        if block_given?
+          instance_exec(&block)
+        end
+        self
       end
 
       def params
@@ -57,14 +66,13 @@ module Elasticsearch
       end
 
       class << self
-        def query_container_method(*method_names)
+        def container_method(container_class, *method_names)
           method_names.flatten.each do |method_name|
             define_method method_name do |*args, &block|
-              puts "~~~> Args passed to query_container_method #{method_name}: #{args.inspect}"
               ivar_sym = "@#{method_name}".to_sym
               ivar = instance_variable_get(ivar_sym)
               if ivar.nil?
-                ivar = instance_variable_set(ivar_sym, QueryContainer.new(*args))
+                ivar = instance_variable_set(ivar_sym, container_class.new(*args))
               end
               ivar.set_search_def(search_def) unless search_def.nil?
               unless block.nil?
@@ -74,24 +82,25 @@ module Elasticsearch
             end
           end
         end
+        def query_container_method(*method_names)
+          container_method(QueryContainer, *method_names)
+        end
         alias :query_container_methods :query_container_method
 
         def filter_container_method(*method_names)
-          method_names.flatten.each do |method_name|
-            define_method method_name do |*args, &block|
-              ivar_sym = "@#{method_name}".to_sym
-              ivar = instance_variable_get(ivar_sym)
-              if ivar.nil?
-                ivar = instance_variable_set(ivar_sym, FilterContainer.new(*args))
-              end
-              unless block.nil?
-                ivar.instance_exec(*args, &block)
-              end
-              ivar
-            end
-          end
+          container_method(FilterContainer, *method_names)
         end
         alias :filter_container_methods :filter_container_method
+
+        def sort_container_method(*method_names)
+          container_method(SortContainer, *method_names)
+        end
+        alias :sort_container_methods :sort_container_method
+
+        def script_field_container_method(*method_names)
+          container_method(ScriptFieldContainer, *method_names)
+        end
+        alias :script_field_container_methods :script_field_container_method
 
         def attribute_method(*method_names)
           method_names.flatten.each do |method_name|
@@ -121,6 +130,27 @@ module Elasticsearch
     class FilterContainer < SearchDefComponent
       include SearchDefComponents
       component_methods :filters
+    end
+
+    class SortContainer < SearchDefComponent
+      include SearchDefComponents
+      component_methods :sorts
+    end
+
+    class ScriptFieldContainer < SearchDefComponent
+      include SearchDefComponents
+      component_methods :script_fields
+
+      def to_hash(params={})
+        if empty?
+          nil
+        elsif components.length == 1
+          components.first.to_hash(params)
+        else
+          # components.collect{|component| component.to_hash(params)}
+          components.inject{|comp, other_comp| comp.to_hash(params).update(other_comp.to_hash(params))}
+        end
+      end
     end
 
   end

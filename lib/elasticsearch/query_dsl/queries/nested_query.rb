@@ -2,11 +2,13 @@ module Elasticsearch
   module QueryDsl
     class NestedQuery < Query
       query_container_method :query
+      attribute_methods :path, :score_mode
 
-      def path(val=nil)
-      end
-
-      def score_more(val=nil)
+      def to_hash(params={})
+        h = {:query => @query.to_hash(params)}
+        h[:path] = @path unless @path.nil?
+        h[:score_mode] = @score_mode unless @score_mode.nil?
+        h
       end
     end
   end
