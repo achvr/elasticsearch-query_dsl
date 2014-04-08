@@ -8,6 +8,7 @@ module Elasticsearch
       delegate *QueryDsl.component_method_names(:score_functions), :to => :functions
 
       def to_hash(params={})
+        functions = @functions.to_hash(params)
         h = {}
         h[:boost] = @boost unless @boost.nil?
         h[:max_boost] = @max_boost unless @max_boost.nil?
@@ -15,7 +16,11 @@ module Elasticsearch
         h[:score_mode] = @score_mode unless @score_mode.nil?
         h[:query] = @query.to_hash(params) unless @query.nil?
         h[:filter] = @filter.to_hash(params) unless @filter.nil?
-        h[:functions] = @functions.to_hash(params)
+        if @functions.is_a?(Hash)
+          h.update(functions)
+        else
+          h[:functions] = functions
+        end
         {:function_score => h}
       end
     end

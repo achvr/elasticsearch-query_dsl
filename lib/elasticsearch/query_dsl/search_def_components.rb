@@ -47,6 +47,11 @@ module Elasticsearch
         components.empty?
       end
 
+      def length
+        components.length
+      end
+      alias :size :length
+
       def reset(&block)
         @components.clear unless @components.nil?
         if block_given?

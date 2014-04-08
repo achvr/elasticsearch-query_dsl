@@ -164,7 +164,7 @@ module Elasticsearch
       def to_hash(params={})
         if empty?
           nil
-        elsif components.length == 1
+        elsif components.length == 1 && (components.first.filter.nil? || components.first.filter.empty?)
           components.first.to_hash(params)
         else
           components.collect do |component|
