@@ -1,8 +1,8 @@
 module Elasticsearch
   module QueryDsl
     class TermsFilter < Filter
-      attribute_methods :field, :values, :execution, :cache
-      alias :_cache :cache
+      attribute_methods :field, :values, :execution
+      attribute_method :cache, :alias => :_cache
 
       def to_hash(params={})
         h = {@field => Array(values)}

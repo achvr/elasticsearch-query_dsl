@@ -4,6 +4,14 @@ module Elasticsearch
 
     class ComponentNotFoundError < StandardError; end
 
+    class ParamPlaceholder
+      attr_reader :param_key
+      def [](param_key)
+        @param_key = param_key
+        self
+      end
+    end
+
     COMPONENT_TYPE_MAP = {
       :basic_queries => {
         :common_terms => {
@@ -336,10 +344,11 @@ module Elasticsearch
     end
   end
 end
-ES = Elasticsearch
+unless defined?(ES)
+  ES = Elasticsearch
+end
 
 require 'multi_json'
-require 'elasticsearch/query_dsl/delegation'
 require 'elasticsearch/query_dsl/version'
 require 'elasticsearch/query_dsl/search_def_components.rb'
 require 'elasticsearch/query_dsl/search_def_component.rb'

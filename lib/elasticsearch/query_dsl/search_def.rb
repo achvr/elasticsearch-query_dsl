@@ -8,10 +8,8 @@ module Elasticsearch
       attribute_methods :fields, :size, :from, :min_score, :timeout
       query_container_method :query
       filter_container_method :post_filter
-      sort_container_method :sort
-      delegate *COMPONENT_TYPE_MAP[:sorts].keys, :to => :sort
-      script_field_container_method :script_fields
-      delegate :script_field, :to => :script_fields
+      sort_container_method :sort, :delegate_methods_from_top => true
+      script_field_container_method :script_fields, :delegate_methods_from_top => true
 
       def search_def
         self

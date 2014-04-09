@@ -6,7 +6,10 @@ module Elasticsearch
       end
 
       module ClassMethods
+        attr_reader :component_types
+
         def component_methods(*component_types)
+          @component_types = component_types
           component_types.each do |component_type|
             COMPONENT_TYPE_MAP[component_type].each do |method_name, component_info|
               define_method method_name do |*args, &block|

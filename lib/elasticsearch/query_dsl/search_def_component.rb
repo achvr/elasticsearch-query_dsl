@@ -1,13 +1,5 @@
 module Elasticsearch
   module QueryDsl
-    class ParamPlaceholder
-      attr_reader :param_key
-      def [](param_key)
-        @param_key = param_key
-        self
-      end
-    end
-
     class SearchDefComponent
       attr_reader :id
       attr_reader :search_def
@@ -66,8 +58,19 @@ module Elasticsearch
       end
 
       class << self
-        def container_method(container_class, *method_names)
-          method_names.flatten.each do |method_name|
+        def delegate_methods(methods, to_method)
+          Array(methods).each do |method|
+            class_eval <<-EOS, __FILE__, __LINE__ + 1
+              def #{method}(*args, &block)
+                #{to_method}.#{method}(*args, &block)
+              end
+            EOS
+          end
+        end
+
+        def container_method(container_class, *args)
+          options = args.last.is_a?(::Hash) ? args.pop : {}
+          args.flatten.each do |method_name|
             define_method method_name do |*args, &block|
               ivar_sym = "@#{method_name}".to_sym
               ivar = instance_variable_get(ivar_sym)
@@ -80,35 +83,48 @@ module Elasticsearch
               end
               ivar
             end
+            component_types = container_class.component_types
+            unless component_types.nil? || component_types.empty?
+              component_types.each do |component_type|
+                if options[:delegate_methods_from_top]
+                  delegate_methods(QueryDsl.component_method_names(component_type), method_name)
+                end
+                if options[:delegate_aliases_from_top]
+                  delegate_methods(QueryDsl.component_method_aliases(component_type), method_name)
+                end
+              end
+            end
           end
         end
-        def query_container_method(*method_names)
-          container_method(QueryContainer, *method_names)
+
+        def query_container_method(*args)
+          container_method(QueryContainer, *args)
         end
         alias :query_container_methods :query_container_method
 
-        def filter_container_method(*method_names)
-          container_method(FilterContainer, *method_names)
+        def filter_container_method(*args)
+          container_method(FilterContainer, *args)
         end
         alias :filter_container_methods :filter_container_method
 
-        def sort_container_method(*method_names)
-          container_method(SortContainer, *method_names)
+        def sort_container_method(*args)
+          container_method(SortContainer, *args)
         end
         alias :sort_container_methods :sort_container_method
 
-        def script_field_container_method(*method_names)
-          container_method(ScriptFieldContainer, *method_names)
+        def script_field_container_method(*args)
+          container_method(ScriptFieldContainer, *args)
         end
         alias :script_field_container_methods :script_field_container_method
 
-        def score_function_container_method(*method_names)
-          container_method(ScoreFunctionContainer, *method_names)
+        def score_function_container_method(*args)
+          container_method(ScoreFunctionContainer, *args)
         end
         alias :score_function_container_methods :score_function_container_method
 
-        def attribute_method(*method_names)
-          method_names.flatten.each do |method_name|
+        def attribute_method(*args)
+          options = args.last.is_a?(::Hash) ? args.pop : {}
+          args.flatten.each do |method_name|
             define_method method_name do |*args, &block|
               ivar_sym = "@#{method_name}".to_sym
               if !block.nil?
@@ -120,6 +136,10 @@ module Elasticsearch
                 instance_variable_set(ivar_sym, args.first)
                 self
               end
+            end
+            aliases = Array(options[:alias] || options[:aliases])
+            aliases.each do |_alias|
+              alias_method _alias, method_name
             end
           end
         end

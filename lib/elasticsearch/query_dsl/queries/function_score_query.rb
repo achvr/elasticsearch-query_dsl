@@ -4,8 +4,7 @@ module Elasticsearch
       attribute_methods :boost, :max_boost, :score_mode, :boost_mode
       query_container_method :query
       filter_container_method :filter
-      score_function_container_method :functions
-      delegate *QueryDsl.component_method_names(:score_functions), :to => :functions
+      score_function_container_method :functions, :delegate_methods_from_top => true, :delegate_aliases_from_top => true
 
       def to_hash(params={})
         functions = @functions.to_hash(params)

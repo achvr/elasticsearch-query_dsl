@@ -71,7 +71,7 @@ module Elasticsearch
         @coordinates.instance_exec(&block) unless block.nil?
         @coordinates
       end
-      delegate :top, :left, :bottom, :right, :top_left, :bottom_right, :to => :coordinates
+      delegate_methods([:top, :left, :bottom, :right, :top_left, :bottom_right], :coordinates)
 
       def to_hash(params={})
         h = {@field => @coordinates.to_hash(params)}
