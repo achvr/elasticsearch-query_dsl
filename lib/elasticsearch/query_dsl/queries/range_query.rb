@@ -1,22 +1,16 @@
 module Elasticsearch
   module QueryDsl
     class RangeQuery < Query
-      def field
-      end
+      attribute_methods :field, :gte, :gt, :lte, :lt, :boost
 
-      def gte
-      end
-
-      def gt
-      end
-
-      def lte
-      end
-
-      def lt
-      end
-
-      def boost
+      def to_hash(params={})
+        h = {}
+        h[:gte]   = @gte unless @gte.nil?
+        h[:gt]    = @gt unless @gt.nil?
+        h[:lte]   = @lte unless @lte.nil?
+        h[:lt]    = @lt unless @lt.nil?
+        h[:boost] = @boost unless @boost.nil?
+        {:range => {@field => h}}
       end
     end
   end

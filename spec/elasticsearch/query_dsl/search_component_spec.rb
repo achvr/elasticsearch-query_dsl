@@ -34,9 +34,6 @@ describe Elasticsearch::QueryDsl::SearchDefComponent do
   end
 
   context 'attributes' do
-    it do
-      should have_attributes(:)
-    end
 
   end
 end

@@ -2,11 +2,7 @@ module Elasticsearch
   module QueryDsl
     class CustomScoreQuery < Query
       query_container_method :query
-
-      def script(val=nil)
-        @script = val unless val.nil?
-        @script
-      end
+      attribute_methods :script
 
       def to_hash(params={})
         {

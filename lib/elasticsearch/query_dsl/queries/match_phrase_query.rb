@@ -3,7 +3,10 @@ require_relative 'match_query'
 module Elasticsearch
   module QueryDsl
     class MatchPhraseQuery < MatchQuery
-      def analyzer
+      protected
+
+      def get_type
+        type || :match_phrase
       end
     end
   end

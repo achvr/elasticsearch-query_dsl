@@ -2,19 +2,8 @@ module Elasticsearch
   module QueryDsl
     class HasChildQuery < Query
       query_container_method :query
-
-      def type(val=nil)
-        @type = val unless val.nil?
-        if block_given?
-          @type = yield
-        end
-        @type
-      end
-
-      def score_type(val=nil)
-        @score_type = val unless val.nil?
-        @score_type
-      end
+      attribute_method :type, :alias => :child_type
+      attribute_method :score_type
 
       def to_hash(params={})
         h = {}

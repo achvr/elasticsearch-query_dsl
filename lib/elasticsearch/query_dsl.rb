@@ -26,10 +26,6 @@ module Elasticsearch
           :class_name => 'FuzzyLikeThisFieldQuery',
           :aliases => [:fuzzy_like_this_field_query, :flt_field]
         },
-        :fuzzy => {
-          :class_name => 'FuzzyQuery',
-          :aliases => [:fuzzy_query]
-        },
         :geo_shape => {
           :class_name => 'GeoShapeQuery',
           :aliases => [:geo_shape_query]
@@ -58,49 +54,13 @@ module Elasticsearch
           :class_name => 'MultiMatchQuery',
           :aliases => [:multi_match_query]
         },
-        :prefix => {
-          :class_name => 'PrefixQuery',
-          :aliases => [:prefix_query]
-        },
         :query_string => {
           :class_name => 'QueryStringQuery',
           :aliases => [:query_string_query]
         },
-        :range => {
-          :class_name => 'RangeQuery',
-          :aliases => [:range_query]
-        },
-        :regexp => {
-          :class_name => 'RegexpQuery',
-          :aliases => [:regexp_query]
-        },
         :simple_query_rstring => {
           :class_name => 'SimpleQueryStringQuery',
           :aliases => [:simple_query_rstring_query]
-        },
-        :span_first => {
-          :class_name => 'SpanFirstQuery',
-          :aliases => [:span_first_query]
-        },
-        :span_multi_term => {
-          :class_name => 'SpanMultiTermQuery',
-          :aliases => [:span_multi_term_query]
-        },
-        :span_near => {
-          :class_name => 'SpanNearQuery',
-          :aliases => [:span_near_query]
-        },
-        :span_not => {
-          :class_name => 'SpanNotQuery',
-          :aliases => [:span_not_query]
-        },
-        :span_or => {
-          :class_name => 'SpanOrQuery',
-          :aliases => [:span_or_query]
-        },
-        :span_term => {
-          :class_name => 'SpanTermQuery',
-          :aliases => [:span_term_query]
         },
         :term => {
           :class_name => 'TermQuery',
@@ -109,6 +69,24 @@ module Elasticsearch
         :terms => {
           :class_name => 'TermsQuery',
           :aliases => [:terms_query]
+        }
+      },
+      :multi_term_queries => {
+        :fuzzy => {
+          :class_name => 'FuzzyQuery',
+          :aliases => [:fuzzy_query]
+        },
+        :prefix => {
+          :class_name => 'PrefixQuery',
+          :aliases => [:prefix_query]
+        },
+        :range => {
+          :class_name => 'RangeQuery',
+          :aliases => [:range_query]
+        },
+        :regexp => {
+          :class_name => 'RegexpQuery',
+          :aliases => [:regexp_query]
         },
         :wildcard => {
           :class_name => 'WildcardQuery',
@@ -163,6 +141,32 @@ module Elasticsearch
         :top_children => {
           :class_name => 'TopChildrenQuery',
           :aliases => [:top_children_query]
+        }
+      },
+      :span_queries => {
+        :span_first => {
+          :class_name => 'SpanFirstQuery',
+          :aliases => [:span_first_query]
+        },
+        :span_multi_term => {
+          :class_name => 'SpanMultiTermQuery',
+          :aliases => [:span_multi_term_query]
+        },
+        :span_near => {
+          :class_name => 'SpanNearQuery',
+          :aliases => [:span_near_query]
+        },
+        :span_not => {
+          :class_name => 'SpanNotQuery',
+          :aliases => [:span_not_query]
+        },
+        :span_or => {
+          :class_name => 'SpanOrQuery',
+          :aliases => [:span_or_query]
+        },
+        :span_term => {
+          :class_name => 'SpanTermQuery',
+          :aliases => [:span_term_query]
         }
       },
       :filters => {

@@ -102,6 +102,16 @@ module Elasticsearch
         end
         alias :query_container_methods :query_container_method
 
+        def multi_term_query_container_method(*args)
+          container_method(MultiTermQueryContainer, *args)
+        end
+        alias :multi_term_query_container_methods :multi_term_query_container_method
+
+        def span_query_container_method(*args)
+          container_method(SpanQueryContainer, *args)
+        end
+        alias :span_query_container_methods :span_query_container_method
+
         def filter_container_method(*args)
           container_method(FilterContainer, *args)
         end
@@ -149,7 +159,17 @@ module Elasticsearch
 
     class QueryContainer < SearchDefComponent
       include SearchDefComponents
-      component_methods :basic_queries, :compound_queries
+      component_methods :basic_queries, :multi_term_queries, :compound_queries, :span_queries
+    end
+
+    class MultiTermQueryContainer < SearchDefComponent
+      include SearchDefComponents
+      component_methods :multi_term_queries
+    end
+
+    class SpanQueryContainer < SearchDefComponent
+      include SearchDefComponents
+      component_methods :span_queries
     end
 
     class FilterContainer < SearchDefComponent

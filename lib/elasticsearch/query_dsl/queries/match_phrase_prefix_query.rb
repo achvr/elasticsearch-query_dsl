@@ -3,7 +3,10 @@ require_relative 'match_phrase_query'
 module Elasticsearch
   module QueryDsl
     class MatchPhrasePrefixQuery < MatchPhraseQuery
-      def max_expansions
+      protected
+
+      def get_type
+        type || :match_phrase_prefix
       end
     end
   end
