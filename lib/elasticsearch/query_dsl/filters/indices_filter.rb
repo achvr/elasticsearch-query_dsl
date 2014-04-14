@@ -1,12 +1,14 @@
 module Elasticsearch
   module QueryDsl
     class IndicesFilter < Filter
-      query_container_method :query
+      attribute_method :indices, :alias => :index
+      filter_container_methods :filter, :no_match_filter
 
-      def indices(val=nil)
-      end
-
-      def no_match_query(val=nil)
+      def to_hash(params={})
+        h = {:indices => Array(@indices)}
+        h[:filter]          = @filter.to_hash(params)
+        h[:no_match_filter] = @no_match_filter unless @no_match_filter.nil? || @no_match_filter.empty?
+        {:indices => h}
       end
     end
   end

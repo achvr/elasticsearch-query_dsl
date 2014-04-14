@@ -26,14 +26,8 @@ describe Elasticsearch::QueryDsl::SearchDefComponent do
         end
       end
 
-      puts "JSON: #{filter_container.to_json(:pretty => true)}"
-
       expect(filter.to_json).to have_json_path('and')
       expect(filter.to_json).to have_json_type(Array).at_path('and')
     end
-  end
-
-  context 'attributes' do
-
   end
 end

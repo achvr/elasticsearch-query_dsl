@@ -280,52 +280,58 @@ module Elasticsearch
         }
       },
       :sorts => {
-        'field_sort' => {
+        :field_sort => {
           :class_name => 'FieldSort',
           :aliases => [:field]
         },
-        'geo_distance_sort' => {
+        :geo_distance_sort => {
           :class_name => 'GeoDistanceSort',
           :aliases => [:geo_distance]
         },
-        'script_sort' => {
+        :script_sort => {
           :class_name => 'ScriptSort',
           :aliases => [:script]
         }
       },
       :script_fields => {
-        'script_field' => {
+        :script_field => {
           :class_name => 'ScriptField',
           :aliases => []
         }
       },
       :score_functions => {
-        'boost_factor' => {
+        :boost_factor => {
           :class_name => 'BoostFactorScoreFunction',
           :aliases => []
         },
-        'exp' => {
+        :exp => {
           :class_name => 'ExpDecayScoreFunction',
           :aliases => [:exp_decay]
         },
-        'field_value_factor' => {
+        :field_value_factor => {
           :class_name => 'FieldValueFactorScoreFunction',
           :aliases => []
         },
-        'gauss' => {
+        :gauss => {
           :class_name => 'GaussDecayScoreFunction',
           :aliases => [:gauss_decay]
         },
-        'linear' => {
+        :linear => {
           :class_name => 'LinearDecayScoreFunction',
           :aliases => [:linear_decay]
         },
-        'random_score' => {
+        :random_score => {
           :class_name => 'RandomScoreFunction',
           :aliases => [:random]
         },
-        'script_score' => {
+        :script_score => {
           :class_name => 'ScriptScoreFunction',
+          :aliases => []
+        }
+      },
+      :geo_point => {
+        :geo_point => {
+          :class_name => 'GeoPoint',
           :aliases => []
         }
       }
@@ -356,12 +362,14 @@ require 'multi_json'
 require 'elasticsearch/query_dsl/version'
 require 'elasticsearch/query_dsl/search_def_components.rb'
 require 'elasticsearch/query_dsl/search_def_component.rb'
+require 'elasticsearch/query_dsl/containers.rb'
 require 'elasticsearch/query_dsl/search_def.rb'
 require 'elasticsearch/query_dsl/query.rb'
 require 'elasticsearch/query_dsl/filter.rb'
 require 'elasticsearch/query_dsl/sort.rb'
 require 'elasticsearch/query_dsl/score_function.rb'
-require 'elasticsearch/query_dsl/script_param_values.rb'
+require 'elasticsearch/query_dsl/geo_point.rb'
+require 'elasticsearch/query_dsl/geo_bounding_box.rb'
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'filters', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'queries', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'sorts', '*.rb')].each {|file| require file }

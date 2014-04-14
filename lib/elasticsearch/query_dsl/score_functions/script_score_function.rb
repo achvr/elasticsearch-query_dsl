@@ -2,12 +2,7 @@ module Elasticsearch
   module QueryDsl
     class ScriptScoreFunction < ScoreFunction
       attribute_methods :lang, :script
-
-      def params(*args, &block)
-        @params ||= ScriptParamValues.new
-        @params.instance_exec(&block)
-        @params
-      end
+      script_params_container_method :params
 
       def to_hash(params={})
         h = {:script => @script}

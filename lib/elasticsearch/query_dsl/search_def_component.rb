@@ -132,6 +132,21 @@ module Elasticsearch
         end
         alias :score_function_container_methods :score_function_container_method
 
+        def geo_point_container_method(*args)
+          container_method(GeoPointContainer, *args)
+        end
+        alias :geo_point_container_methods :geo_point_container_method
+
+        def geo_shape_container_method(*args)
+          container_method(GeoShapeContainer, *args)
+        end
+        alias :geo_shape_container_methods :geo_shape_container_method
+
+        def script_params_container_method(*args)
+          container_method(ScriptParamsContainer, *args)
+        end
+        alias :script_params_container_methods :script_params_container_method
+
         def attribute_method(*args)
           options = args.last.is_a?(::Hash) ? args.pop : {}
           args.flatten.each do |method_name|
@@ -154,67 +169,6 @@ module Elasticsearch
           end
         end
         alias :attribute_methods :attribute_method
-      end
-    end
-
-    class QueryContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :basic_queries, :multi_term_queries, :compound_queries, :span_queries
-    end
-
-    class MultiTermQueryContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :multi_term_queries
-    end
-
-    class SpanQueryContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :span_queries
-    end
-
-    class FilterContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :filters
-    end
-
-    class SortContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :sorts
-    end
-
-    class ScriptFieldContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :script_fields
-
-      def to_hash(params={})
-        if empty?
-          nil
-        elsif components.length == 1
-          components.first.to_hash(params)
-        else
-          components.inject{|comp, other_comp| comp.to_hash(params).update(other_comp.to_hash(params))}
-        end
-      end
-    end
-
-    class ScoreFunctionContainer < SearchDefComponent
-      include SearchDefComponents
-      component_methods :score_functions
-
-      def to_hash(params={})
-        if empty?
-          nil
-        elsif components.length == 1 && (components.first.filter.nil? || components.first.filter.empty?)
-          components.first.to_hash(params)
-        else
-          components.collect do |component|
-            if !component.filter.nil? && !component.filter.empty?
-              {:filter => component.filter.to_hash(params)}.update(component.to_hash(params))
-            else
-              component.to_hash(params)
-            end
-          end
-        end
       end
     end
   end

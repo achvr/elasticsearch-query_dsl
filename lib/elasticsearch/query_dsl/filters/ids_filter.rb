@@ -1,10 +1,12 @@
 module Elasticsearch
   module QueryDsl
     class IdsFilter < Filter
-      attr_accessor :values, :type
-      def initialize(values, type=nil)
-        @values = values
-        @type = type
+      attribute_methods :type, :values
+
+      def to_hash(params={})
+        h = {:values => Array(@values)}
+        h[:type] = @type unless @type.nil?
+        {:ids => h}
       end
     end
   end

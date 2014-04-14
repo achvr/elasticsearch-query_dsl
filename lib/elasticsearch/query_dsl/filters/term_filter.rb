@@ -5,7 +5,7 @@ module Elasticsearch
 
       def to_hash(params={})
         h = {@field => value}
-        {'term' => h}
+        {:term => h}
       end
     end
   end
