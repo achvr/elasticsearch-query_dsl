@@ -274,6 +274,10 @@ module Elasticsearch
           :class_name => 'TermsFilter',
           :aliases => [:terms_filter]
         },
+        :terms_lookup => {
+          :class_name => 'TermsLookupFilter',
+          :aliases => [:terms_lookup_filter]
+        },
         :type => {
           :class_name => 'TypeFilter',
           :aliases => [:type_filter]
