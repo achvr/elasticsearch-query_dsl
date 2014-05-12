@@ -1,7 +1,8 @@
 module Elasticsearch
   module QueryDsl
     class GeoDistanceSort < Sort
-      attribute_methods :field, :coordinates, :order, :unit, :sort_mode
+      attribute_methods :field, :coordinates, :order, :unit
+      attribute_method :sort_mode, :alias => :mode
 
       def to_hash(params={})
         h = {@field => @coordinates}

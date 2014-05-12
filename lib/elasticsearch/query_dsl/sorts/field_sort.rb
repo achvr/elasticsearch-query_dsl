@@ -1,7 +1,8 @@
 module Elasticsearch
   module QueryDsl
     class FieldSort < Sort
-      attribute_methods :field, :order, :mode, :nested_filter, :missing, :ignore_unmapped
+      attribute_methods :field, :order, :nested_filter, :missing, :ignore_unmapped
+      attribute_method :mode, :alias => :sort_mode
 
       def to_hash(params={})
         h = {}

@@ -13,7 +13,7 @@ module Elasticsearch
           component_types.each do |component_type|
             COMPONENT_TYPE_MAP[component_type].each do |method_name, component_info|
               define_method method_name do |*args, &block|
-                component = Elasticsearch::QueryDsl.const_get(component_info[:class_name]).new(*args)
+                component = get_component_class(component_info[:class_name]).new(*args)
                 component.set_search_def(search_def)
                 unless block.nil?
                   component.instance_exec(&block)
@@ -70,6 +70,11 @@ module Elasticsearch
         @components ||= []
       end
 
+      def get_component_class(module_and_class_name)
+        module_and_class_name.split('::').inject(Elasticsearch::QueryDsl) do |mod, class_name|
+          mod.const_get(class_name)
+        end
+      end
     end
   end
 end

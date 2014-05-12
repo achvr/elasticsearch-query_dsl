@@ -1,7 +1,5 @@
 module Elasticsearch
   module QueryDsl
-    autoload :Logger, 'elasticsearch/query_dsl/logger'
-
     class ComponentNotFoundError < StandardError; end
 
     class ParamPlaceholder
@@ -198,9 +196,9 @@ module Elasticsearch
           :class_name => 'GeoPolygonFilter',
           :aliases => [:geo_polygon_filter]
         },
-        :geoShape => {
+        :geo_shape => {
           :class_name => 'GeoShapeFilter',
-          :aliases => [:geoShape_filter]
+          :aliases => [:geo_shape_filter]
         },
         :geohash_cell => {
           :class_name => 'GeohashCellFilter',
@@ -338,6 +336,44 @@ module Elasticsearch
           :class_name => 'GeoPoint',
           :aliases => []
         }
+      },
+      :geo_shapes => {
+        :geo_shape => {
+          :class_name => 'GeoShape',
+          :aliases => [:shape]
+        },
+        :point => {
+          :class_name => 'GeoShape::Point',
+          :aliases => []
+        },
+        :linestring => {
+          :class_name => 'GeoShape::LineString',
+          :aliases => []
+        },
+        :polygon => {
+          :class_name => 'GeoShape::Polygon',
+          :aliases => []
+        },
+        :multipoint => {
+          :class_name => 'GeoShape::MultiPoint',
+          :aliases => []
+        },
+        :multilinestring => {
+          :class_name => 'GeoShape::MultiLineString',
+          :aliases => []
+        },
+        :multipolygon => {
+          :class_name => 'GeoShape::MultiPolygon',
+          :aliases => []
+        },
+        :envelope => {
+          :class_name => 'GeoShape::Envelope',
+          :aliases => []
+        },
+        :circle => {
+          :class_name => 'GeoShape::Circle',
+          :aliases => []
+        }
       }
     }
 
@@ -374,6 +410,7 @@ require 'elasticsearch/query_dsl/sort.rb'
 require 'elasticsearch/query_dsl/score_function.rb'
 require 'elasticsearch/query_dsl/geo_point.rb'
 require 'elasticsearch/query_dsl/geo_bounding_box.rb'
+require 'elasticsearch/query_dsl/geo_shape.rb'
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'filters', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'queries', '*.rb')].each {|file| require file }
 Dir[File.join(File.dirname(__FILE__), 'query_dsl', 'sorts', '*.rb')].each {|file| require file }

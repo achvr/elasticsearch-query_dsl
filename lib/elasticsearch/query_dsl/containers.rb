@@ -68,7 +68,7 @@ module Elasticsearch
 
     class GeoShapeContainer < SearchDefComponent
       include SearchDefComponents
-      # component_methods :geo_shape
+      component_methods :geo_shapes
     end
 
     class ScriptParamsContainer < SearchDefComponent
