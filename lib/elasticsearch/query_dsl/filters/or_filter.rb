@@ -2,12 +2,16 @@ module Elasticsearch
   module QueryDsl
     class OrFilter < Filter
       attribute_method :cache, :alias => :_cache
-      filter_container_method :filter
+      filter_container_method :filters, :delegate_methods_from_top => true, :delegate_aliases_from_top => true
 
       def to_hash(params={})
-        h = {:filter => @filter.to_hash(params)}
-        h[:_cache] = @cache unless @cache.nil?
-        {:or => h}
+        filters = (@filters.nil? || @filters.empty?) ? [] : @filters.to_hash(params)
+        if cache
+          inner = {:filters => filters, :_cache => true}
+        else
+          inner = filters
+        end
+        {:or => inner}
       end
     end
   end
