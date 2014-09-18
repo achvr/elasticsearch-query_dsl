@@ -7,7 +7,6 @@ module Elasticsearch
       score_function_container_method :functions, :delegate_methods_from_top => true, :delegate_aliases_from_top => true
 
       def to_hash(params={})
-        functions = @functions.to_hash(params)
         h = {}
         h[:boost] = @boost unless @boost.nil?
         h[:max_boost] = @max_boost unless @max_boost.nil?
@@ -15,10 +14,13 @@ module Elasticsearch
         h[:score_mode] = @score_mode unless @score_mode.nil?
         h[:query] = @query.to_hash(params) unless @query.nil?
         h[:filter] = @filter.to_hash(params) unless @filter.nil?
-        if @functions.is_a?(Hash)
-          h.update(functions)
-        else
-          h[:functions] = functions
+        unless @functions.nil?
+          functions = @functions.to_hash(params)
+          if functions.is_a?(Hash)
+            h.update(functions)
+          else
+            h[:functions] = functions
+          end
         end
         {:function_score => h}
       end
